@@ -61,6 +61,30 @@
   }
 }
 
+@layer components {
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  }
+
+  .btn-custom {
+    @apply bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg 
+           transition-all duration-200 ease-in-out transform hover:scale-105;
+  }
+
+  .pattern-grid {
+    @apply grid grid-cols-8 gap-1 sm:grid-cols-16;
+  }
+
+  .pattern-cell {
+    @apply w-8 h-8 rounded-md transition-colors duration-200
+           bg-gray-800/50 hover:bg-purple-600/50
+           data-[state=on]:bg-purple-600 data-[state=on]:text-white;
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -78,29 +102,4 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
-}
-
-/* Glass effect for components */
-.glass-effect {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-}
-
-/* Custom button styles */
-.btn-custom {
-  @apply bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg 
-         transition-all duration-200 ease-in-out transform hover:scale-105;
-}
-
-/* Pattern grid styles */
-.pattern-grid {
-  @apply grid grid-cols-8 gap-1 sm:grid-cols-16;
-}
-
-.pattern-cell {
-  @apply w-8 h-8 rounded-md transition-colors duration-200
-         bg-gray-800/50 hover:bg-purple-600/50
-         data-[state=on]:bg-purple-600 data-[state=on]:text-white;
 }
