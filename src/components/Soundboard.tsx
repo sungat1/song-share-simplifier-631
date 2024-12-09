@@ -23,13 +23,13 @@ const Soundboard: React.FC = () => {
   } = useSoundboard();
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8 space-y-8">
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-4">
+    <div className="w-full max-w-7xl mx-auto p-4 space-y-6">
+      <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-wrap items-center gap-2">
           <Button
             onClick={isRecording ? stopRecording : startRecording}
             variant={isRecording ? "destructive" : "default"}
-            className="min-w-[100px]"
+            className="w-full sm:w-auto"
           >
             {isRecording ? 'Stop Recording' : 'Start Recording'}
           </Button>
@@ -39,6 +39,7 @@ const Soundboard: React.FC = () => {
                 key={soundType}
                 onClick={() => addSound(soundType as keyof typeof predefinedSounds)}
                 variant="outline"
+                className="flex-1 sm:flex-none"
               >
                 Add {soundType}
               </Button>
@@ -47,28 +48,28 @@ const Soundboard: React.FC = () => {
           <Button 
             variant="outline" 
             onClick={clearBoard}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 w-full sm:w-auto"
           >
             <Trash2 className="w-4 h-4" />
             Clear
           </Button>
         </div>
-        <div className="flex items-center gap-4 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
           <Input
             placeholder="Song name"
             value={songName}
             onChange={(e) => setSongName(e.target.value)}
-            className="min-w-[200px]"
+            className="flex-1"
           />
-          <Button onClick={saveSong}>Save</Button>
+          <Button onClick={saveSong} className="w-full sm:w-auto">Save</Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {sounds.map((sound) => (
           <div
             key={sound.id}
-            className="p-4 bg-white rounded-lg shadow-sm border flex items-center justify-between"
+            className="p-4 bg-white rounded-lg shadow-sm border flex flex-col sm:flex-row items-center justify-between gap-2"
           >
             <span className="capitalize">{sound.name}</span>
             <div className="flex items-center gap-2">
