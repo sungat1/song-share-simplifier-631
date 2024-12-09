@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { useSoundboard } from '../hooks/useSoundboard';
 import { Trash2 } from 'lucide-react';
+import { predefinedSounds } from '../utils/audioGenerator';
 
 const Soundboard: React.FC = () => {
   const {
@@ -21,16 +22,6 @@ const Soundboard: React.FC = () => {
     clearBoard,
   } = useSoundboard();
 
-  const handleAddSound = () => {
-    const newSound = {
-      id: crypto.randomUUID(),
-      name: `Sound ${sounds.length + 1}`,
-      url: '/path/to/sound.mp3',
-      isPlaying: false,
-    };
-    addSound(newSound);
-  };
-
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-8 space-y-8">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -42,7 +33,17 @@ const Soundboard: React.FC = () => {
           >
             {isRecording ? 'Stop Recording' : 'Start Recording'}
           </Button>
-          <Button onClick={handleAddSound}>Add Sound</Button>
+          <div className="flex flex-wrap gap-2">
+            {Object.keys(predefinedSounds).map((soundType) => (
+              <Button 
+                key={soundType}
+                onClick={() => addSound(soundType as keyof typeof predefinedSounds)}
+                variant="outline"
+              >
+                Add {soundType}
+              </Button>
+            ))}
+          </div>
           <Button 
             variant="outline" 
             onClick={clearBoard}
@@ -63,13 +64,13 @@ const Soundboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-x-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {sounds.map((sound) => (
           <div
             key={sound.id}
             className="p-4 bg-white rounded-lg shadow-sm border flex items-center justify-between"
           >
-            <span>{sound.name}</span>
+            <span className="capitalize">{sound.name}</span>
             <div className="flex items-center gap-2">
               <Button
                 size="sm"

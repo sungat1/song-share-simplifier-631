@@ -1,12 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
+import { generateSound, predefinedSounds, SoundType } from '../utils/audioGenerator';
 
 export interface Sound {
   id: string;
   name: string;
-  url: string;
+  type: SoundType;
   isPlaying: boolean;
+  loopInterval?: number;
 }
 
 export interface Song {
@@ -25,30 +27,57 @@ export const useSoundboard = () => {
 
   const clearBoard = useCallback(() => {
     console.log('Clearing board...');
+    // Stop all playing sounds
+    sounds.forEach(sound => {
+      if (sound.loopInterval) {
+        clearInterval(sound.loopInterval);
+      }
+    });
     setSounds([]);
     setRecordedSounds([]);
     setSongName('');
     setIsRecording(false);
-    navigate('/'); // Clear URL parameters
+    navigate('/');
     toast.success('Board cleared');
-  }, [navigate]);
+  }, [navigate, sounds]);
 
-  const addSound = useCallback((sound: Sound) => {
-    setSounds(prev => [...prev, sound]);
+  const addSound = useCallback((soundType: SoundType) => {
+    const newSound: Sound = {
+      id: crypto.randomUUID(),
+      name: soundType,
+      type: soundType,
+      isPlaying: false
+    };
+    setSounds(prev => [...prev, newSound]);
   }, []);
 
   const removeSound = useCallback((soundId: string) => {
-    setSounds(prev => prev.filter(s => s.id !== soundId));
+    setSounds(prev => {
+      const soundToRemove = prev.find(s => s.id === soundId);
+      if (soundToRemove?.loopInterval) {
+        clearInterval(soundToRemove.loopInterval);
+      }
+      return prev.filter(s => s.id !== soundId);
+    });
   }, []);
 
   const toggleSound = useCallback((soundId: string) => {
-    setSounds(prev => 
-      prev.map(sound => 
-        sound.id === soundId 
-          ? { ...sound, isPlaying: !sound.isPlaying }
-          : sound
-      )
-    );
+    setSounds(prev => {
+      return prev.map(sound => {
+        if (sound.id === soundId) {
+          if (sound.isPlaying && sound.loopInterval) {
+            clearInterval(sound.loopInterval);
+            return { ...sound, isPlaying: false, loopInterval: undefined };
+          } else {
+            const interval = window.setInterval(() => {
+              generateSound(predefinedSounds[sound.type]);
+            }, 500) as unknown as number;
+            return { ...sound, isPlaying: true, loopInterval: interval };
+          }
+        }
+        return sound;
+      });
+    });
   }, []);
 
   const startRecording = useCallback(() => {
@@ -79,7 +108,6 @@ export const useSoundboard = () => {
     };
 
     try {
-      // Simulate saving to a backend
       console.log('Saving song:', song);
       navigate(`/?song=${song.id}`);
       toast.success('Song saved successfully!');
@@ -93,13 +121,11 @@ export const useSoundboard = () => {
 
   const loadSong = useCallback(async (songId: string) => {
     try {
-      // Simulate loading from a backend
       console.log('Loading song:', songId);
-      // In a real app, you would fetch the song data from your backend
       const mockSong: Song = {
         id: songId,
         name: 'Loaded Song',
-        sounds: [], // This would come from your backend
+        sounds: [],
       };
       
       setSongName(mockSong.name);
@@ -111,7 +137,6 @@ export const useSoundboard = () => {
     }
   }, []);
 
-  // Load song from URL on initial render
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const songId = params.get('song');
