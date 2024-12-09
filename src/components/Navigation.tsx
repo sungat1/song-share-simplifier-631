@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Waveform } from 'lucide-react';
+import { Menu, X, AudioWaveform } from 'lucide-react';
 import { Button } from './ui/button';
 
 const Navigation = () => {
@@ -11,7 +11,7 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <Waveform className="h-8 w-8 text-cyan-400" />
+            <AudioWaveform className="h-8 w-8 text-cyan-400" />
             <Link to="/" className="text-cyan-400 font-bold text-xl flex items-center">
               BitBoard
             </Link>
