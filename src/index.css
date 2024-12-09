@@ -56,21 +56,22 @@
 
   body {
     @apply bg-background text-foreground;
-    background: linear-gradient(to bottom, #1a1a1a, #2d1f3d);
+    background: #000000;
     min-height: 100vh;
+    color: #00ffff;
   }
 }
 
 @layer components {
   .glass-effect {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    border: 1px solid rgba(0, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 255, 255, 0.1);
   }
 
   .btn-custom {
-    @apply bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg 
+    @apply bg-cyan-400 hover:bg-cyan-500 text-black font-medium py-2 px-4 rounded-lg 
            transition-all duration-200 ease-in-out transform hover:scale-105;
   }
 
@@ -79,9 +80,9 @@
   }
 
   .pattern-cell {
-    @apply w-8 h-8 rounded-md transition-colors duration-200
-           bg-gray-800/50 hover:bg-purple-600/50
-           data-[state=on]:bg-purple-600 data-[state=on]:text-white;
+    @apply w-8 h-8 rounded-sm transition-colors duration-200
+           border border-cyan-500/30 bg-transparent hover:bg-cyan-500/20
+           data-[state=on]:bg-cyan-500 data-[state=on]:text-black;
   }
 }
 
@@ -92,14 +93,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: #000000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4a4a4a;
+  background: #00ffff40;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #00ffff80;
 }

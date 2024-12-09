@@ -27,17 +27,17 @@ const Soundboard: React.FC = () => {
   } = useSoundboard();
 
   return (
-    <div className="min-h-screen bg-transparent text-white p-4">
+    <div className="min-h-screen bg-black text-cyan-400 p-4">
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex flex-col space-y-4">
-          <h1 className="text-4xl font-bold text-center mb-8 text-purple-300">Programmable Soundboard</h1>
+          <h1 className="text-4xl font-bold text-center mb-8 text-cyan-400">Bitboard</h1>
           
           {/* Controls Section */}
-          <div className="flex flex-wrap gap-4 justify-center items-center bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-purple-500/20">
+          <div className="flex flex-wrap gap-4 justify-center items-center glass-effect p-6 rounded-lg">
             <Button
               onClick={isRecording ? stopRecording : startRecording}
               variant={isRecording ? "destructive" : "default"}
-              className="min-w-[120px] bg-purple-600 hover:bg-purple-700 flex items-center gap-2"
+              className="min-w-[120px] bg-cyan-400 hover:bg-cyan-500 text-black flex items-center gap-2"
             >
               {isRecording ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
               {isRecording ? 'Stop' : 'Play'}
@@ -49,7 +49,7 @@ const Soundboard: React.FC = () => {
                   key={soundType}
                   onClick={() => addSound(soundType as keyof typeof predefinedSounds)}
                   variant="outline"
-                  className="bg-gray-800/50 hover:bg-gray-700/50 border-purple-500/30 text-purple-300"
+                  className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20"
                 >
                   Add {soundType}
                 </Button>
@@ -62,17 +62,17 @@ const Soundboard: React.FC = () => {
                 placeholder="BPM"
                 value={globalBPM}
                 onChange={(e) => setGlobalBPM(Number(e.target.value))}
-                className="w-24 bg-gray-800/50 border-purple-500/30 text-purple-300"
+                className="w-24 bg-transparent border-cyan-500/30 text-cyan-400"
                 min={40}
                 max={200}
               />
-              <span className="text-purple-300">BPM</span>
+              <span className="text-cyan-400">BPM</span>
             </div>
 
             <Button 
               variant="outline" 
               onClick={clearBoard}
-              className="bg-gray-800/50 hover:bg-gray-700/50 border-purple-500/30 text-purple-300 flex items-center gap-2"
+              className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 flex items-center gap-2"
             >
               <Trash2 className="w-4 h-4" />
               Clear
@@ -80,16 +80,16 @@ const Soundboard: React.FC = () => {
           </div>
 
           {/* Song Management */}
-          <div className="flex flex-wrap gap-4 items-center justify-center bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-purple-500/20">
+          <div className="flex flex-wrap gap-4 items-center justify-center glass-effect p-6 rounded-lg">
             <Input
               placeholder="Song name"
               value={songName}
               onChange={(e) => setSongName(e.target.value)}
-              className="max-w-xs bg-gray-800/50 border-purple-500/30 text-purple-300"
+              className="max-w-xs bg-transparent border-cyan-500/30 text-cyan-400"
             />
             <Button 
               onClick={saveSong}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-cyan-400 hover:bg-cyan-500 text-black"
             >
               Save
             </Button>
@@ -97,14 +97,14 @@ const Soundboard: React.FC = () => {
         </div>
 
         {/* Sound Patterns Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {sounds.map((sound) => (
             <div
               key={sound.id}
-              className="bg-gray-900/50 backdrop-blur-sm rounded-xl border border-purple-500/20 p-6 space-y-4"
+              className="glass-effect rounded-lg p-6 space-y-4"
             >
               <div className="flex items-center justify-between">
-                <span className="capitalize text-lg font-medium text-purple-300">{sound.name}</span>
+                <span className="capitalize text-lg font-medium text-cyan-400">{sound.name}</span>
                 <div className="flex items-center gap-2">
                   <Button
                     size="sm"
@@ -115,7 +115,7 @@ const Soundboard: React.FC = () => {
                         recordSound(sound);
                       }
                     }}
-                    className="bg-purple-600 hover:bg-purple-700 flex items-center gap-2"
+                    className="bg-cyan-400 hover:bg-cyan-500 text-black flex items-center gap-2"
                   >
                     {sound.isPlaying ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                     {sound.isPlaying ? 'Stop' : 'Play'}
@@ -124,7 +124,7 @@ const Soundboard: React.FC = () => {
                     size="sm"
                     variant="ghost"
                     onClick={() => removeSound(sound.id)}
-                    className="hover:bg-gray-700/50 text-purple-300"
+                    className="hover:bg-cyan-500/20 text-cyan-400"
                   >
                     Remove
                   </Button>
@@ -132,7 +132,7 @@ const Soundboard: React.FC = () => {
               </div>
               
               <div className="space-y-2">
-                <span className="text-sm text-purple-300">Pattern:</span>
+                <span className="text-sm text-cyan-400">Pattern:</span>
                 <ToggleGroup 
                   type="multiple"
                   value={sound.pattern?.map((v, i) => v ? i.toString() : '').filter(Boolean)}
@@ -150,7 +150,7 @@ const Soundboard: React.FC = () => {
                       key={i}
                       value={i.toString()}
                       aria-label={`Step ${i + 1}`}
-                      className="w-8 h-8 bg-gray-800/50 data-[state=on]:bg-purple-600 data-[state=on]:text-white border-purple-500/30 text-purple-300"
+                      className="w-8 h-8 border border-cyan-500/30 bg-transparent data-[state=on]:bg-cyan-500 data-[state=on]:text-black hover:bg-cyan-500/20"
                     >
                       {i + 1}
                     </ToggleGroupItem>
@@ -162,13 +162,13 @@ const Soundboard: React.FC = () => {
         </div>
 
         {recordedSounds.length > 0 && (
-          <div className="bg-gray-900/50 backdrop-blur-sm p-6 rounded-xl border border-purple-500/20">
-            <h2 className="text-xl font-semibold mb-4 text-purple-300">Recorded Sequence</h2>
+          <div className="glass-effect p-6 rounded-lg">
+            <h2 className="text-xl font-semibold mb-4 text-cyan-400">Recorded Sequence</h2>
             <div className="flex flex-wrap gap-2">
               {recordedSounds.map((sound, index) => (
                 <div
                   key={`${sound.id}-${index}`}
-                  className="px-3 py-1 bg-gray-800/50 rounded-full text-sm text-purple-300 border border-purple-500/30"
+                  className="px-3 py-1 border border-cyan-500/30 rounded-full text-sm text-cyan-400"
                 >
                   {sound.name}
                 </div>
