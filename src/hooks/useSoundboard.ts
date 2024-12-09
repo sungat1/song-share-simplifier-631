@@ -9,6 +9,8 @@ export interface Sound {
   type: SoundType;
   isPlaying: boolean;
   loopInterval?: number;
+  pattern?: number[];
+  bpm?: number;
 }
 
 export interface Song {
@@ -22,12 +24,12 @@ export const useSoundboard = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordedSounds, setRecordedSounds] = useState<Sound[]>([]);
   const [songName, setSongName] = useState('');
+  const [globalBPM, setGlobalBPM] = useState(120);
   const navigate = useNavigate();
   const location = useLocation();
 
   const clearBoard = useCallback(() => {
     console.log('Clearing board...');
-    // Stop all playing sounds
     sounds.forEach(sound => {
       if (sound.loopInterval) {
         clearInterval(sound.loopInterval);
@@ -46,10 +48,12 @@ export const useSoundboard = () => {
       id: crypto.randomUUID(),
       name: soundType,
       type: soundType,
-      isPlaying: false
+      isPlaying: false,
+      pattern: [1, 0, 0, 0], // Default 4/4 pattern
+      bpm: globalBPM
     };
     setSounds(prev => [...prev, newSound]);
-  }, []);
+  }, [globalBPM]);
 
   const removeSound = useCallback((soundId: string) => {
     setSounds(prev => {
@@ -61,6 +65,12 @@ export const useSoundboard = () => {
     });
   }, []);
 
+  const updatePattern = useCallback((soundId: string, pattern: number[]) => {
+    setSounds(prev => prev.map(sound => 
+      sound.id === soundId ? { ...sound, pattern } : sound
+    ));
+  }, []);
+
   const toggleSound = useCallback((soundId: string) => {
     setSounds(prev => {
       return prev.map(sound => {
@@ -69,16 +79,23 @@ export const useSoundboard = () => {
             clearInterval(sound.loopInterval);
             return { ...sound, isPlaying: false, loopInterval: undefined };
           } else {
+            const stepDuration = (60 / (sound.bpm || globalBPM)) * 1000 / 4; // Duration for each 16th note
+            let step = 0;
+            
             const interval = window.setInterval(() => {
-              generateSound(predefinedSounds[sound.type]);
-            }, 500) as unknown as number;
+              if (sound.pattern && sound.pattern[step % sound.pattern.length]) {
+                generateSound(predefinedSounds[sound.type]);
+              }
+              step++;
+            }, stepDuration) as unknown as number;
+            
             return { ...sound, isPlaying: true, loopInterval: interval };
           }
         }
         return sound;
       });
     });
-  }, []);
+  }, [globalBPM]);
 
   const startRecording = useCallback(() => {
     setIsRecording(true);
@@ -150,6 +167,7 @@ export const useSoundboard = () => {
     addSound,
     removeSound,
     toggleSound,
+    updatePattern,
     isRecording,
     startRecording,
     stopRecording,
@@ -160,5 +178,7 @@ export const useSoundboard = () => {
     saveSong,
     loadSong,
     clearBoard,
+    globalBPM,
+    setGlobalBPM,
   };
 };

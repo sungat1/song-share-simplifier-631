@@ -1,7 +1,6 @@
-// Sound generation utilities using Web Audio API
 const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
 
-interface OscillatorOptions {
+interface SoundParameters {
   type: OscillatorType;
   frequency: number;
   duration: number;
@@ -13,7 +12,7 @@ export const generateSound = ({
   frequency,
   duration,
   gain = 0.5
-}: OscillatorOptions): Promise<void> => {
+}: SoundParameters): Promise<void> => {
   return new Promise((resolve) => {
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
